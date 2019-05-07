@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.28307.271
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Perceptron", "Perceptron\Perceptron.csproj", "{AE5C944B-AB6D-47FE-BE8E-67CC33CFE004}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PerceptronLibrary", "Perceptron Library\PerceptronLibrary.csproj", "{07477372-7D55-42BB-98D5-E3E8FD13D69B}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AE5C944B-AB6D-47FE-BE8E-67CC33CFE004}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE5C944B-AB6D-47FE-BE8E-67CC33CFE004}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE5C944B-AB6D-47FE-BE8E-67CC33CFE004}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE5C944B-AB6D-47FE-BE8E-67CC33CFE004}.Release|Any CPU.Build.0 = Release|Any CPU
+		{07477372-7D55-42BB-98D5-E3E8FD13D69B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{07477372-7D55-42BB-98D5-E3E8FD13D69B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{07477372-7D55-42BB-98D5-E3E8FD13D69B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{07477372-7D55-42BB-98D5-E3E8FD13D69B}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {855AC704-6DF5-4943-9CDC-371F65490308}
+	EndGlobalSection
+EndGlobal
