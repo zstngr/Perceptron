@@ -16,12 +16,9 @@ namespace PerceptronLibrary
 
         public Neuron(double[] Inputs)
         {
-            inputs = Inputs;
-            weights = new double[inputs.Length];
+            weights = new double[Inputs.Length];
             randomizeWeights();
-            setState();
-            setOutput("SigmoidLogistic", 2, 2);
-            Console.WriteLine(output);
+            enableNeuron(Inputs);
         }
 
         void randomizeWeights()
@@ -33,9 +30,16 @@ namespace PerceptronLibrary
                 if (i == 0) correctionWeight = Convert.ToDouble(rand.Next(-5, 5)) / 100;
             }
         }
-        void Train(double delta, double velocity)
+        public void changeWeights(double delta, double velocity)
         {
-            for(int i = 0; i < )
+            for(int i = 0; i < weights.Length; i++)
+            {
+                Console.WriteLine($"Старый вес: {weights[i]}");
+                weights[i] = weights[i] + velocity * delta * inputs[i];
+                Console.WriteLine($"Новый вес: {weights[i]}");
+            }
+            Console.WriteLine(new string('-', 50));
+            correctionWeight = correctionWeight + velocity * delta;
         }
         void setState() // Глобальные переменные
         {
@@ -59,6 +63,13 @@ namespace PerceptronLibrary
                 case "HeavysideDown":
                     break;
             }
+        }
+        internal void enableNeuron(double[] Inputs)
+        {
+            inputs = Inputs;
+            setState();
+            setOutput("SigmoidLogistic", 2, 2);
+            Console.WriteLine(output);
         }
     }
 }
