@@ -42,9 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivationFunctions.cs" />
-    <Compile Include="Class1.cs" />
-    <Compile Include="Network.cs" />
+    <Compile Include="Perceptron.cs" />
+    <Compile Include="DataSetTools.cs" />
     <Compile Include="Neuron.cs" />
+    <Compile Include="Normalization.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -8,68 +8,77 @@ namespace PerceptronLibrary
 {
     class Neuron
     {
-        double[] inputs;
+        double output;
         double[] weights;
-        double correctionWeight;
-        double state;
-        internal double output;
+        double biasWeight;
+        Random rnd = new Random();
+        double learningRate = 0.2;
 
-        public Neuron(double[] Inputs)
+        public Neuron(int inputCount)
         {
-            weights = new double[Inputs.Length];
-            randomizeWeights();
-            enableNeuron(Inputs);
-        }
-
-        void randomizeWeights()
-        {
-            Random rand = new Random();
+            weights = new double[inputCount];
             for (int i = 0; i < weights.Length; i++)
             {
-                weights[i] = Convert.ToDouble(rand.Next(-5, 5)) / 100;
-                if (i == 0) correctionWeight = Convert.ToDouble(rand.Next(-5, 5)) / 100;
+                weights[i] = rnd.NextDouble();
             }
+            biasWeight = rnd.NextDouble();
         }
-        public void changeWeights(double delta, double velocity)
+
+        public double CalculateOutput(double[] input)
         {
-            for(int i = 0; i < weights.Length; i++)
+            double state = 0;
+            for (int i = 0; i < input.Length; i++)
             {
-                Console.WriteLine($"Старый вес: {weights[i]}");
-                weights[i] = weights[i] + velocity * delta * inputs[i];
-                Console.WriteLine($"Новый вес: {weights[i]}");
+                state += input[i] * weights[i];
             }
-            Console.WriteLine(new string('-', 50));
-            correctionWeight = correctionWeight + velocity * delta;
+            state += biasWeight;
+            return SigmoidLogistic(state, 20.0);
         }
-        void setState() // Глобальные переменные
+
+        public void Train(double[,] inputs, double[] outputs) // In[NumberOfSample, NumberOfInput] Out[NumberOfSample]
         {
-            for (int i = 0; i < inputs.Length; i++)
+            for (int numberOfSample = 0; numberOfSample < inputs.GetLength(0); numberOfSample++)
             {
-                state += inputs[i] * weights[i];
+                output = CalculateOutput(toInput(inputs, numberOfSample));
+                double error = outputs[numberOfSample] - output;
+                for (int numberOfInput = 0; numberOfInput < inputs.GetLength(1); numberOfInput++)
+                {
+                    weights[numberOfInput] += learningRate * error * inputs[numberOfSample, numberOfInput];
+                }
+                biasWeight += learningRate * error * 1;
             }
         }
-        void setOutput(string ActivationFunctionType, double Alpha, double Threshold)
+
+        public double Train(double[,] inputs, double[] outputs, double errorThreshold) // In[NumberOfSample, NumberOfInput] Out[NumberOfSample]
         {
-            switch (ActivationFunctionType)
+            double totalError = 0;
+            for (int numberOfSample = 0; numberOfSample < inputs.GetLength(0); numberOfSample++)
             {
-                case "SigmoidLogistic":
-                    output = ActivationFunctions.SigmoidLogistic(state, Alpha);
-                    break;
-                case "HyperbolicTangent":
-                    output = ActivationFunctions.HyperbolicTangent(state, Alpha);
-                    break;
-                case "HeavysideUp":
-                    break;
-                case "HeavysideDown":
-                    break;
+                output = CalculateOutput(toInput(inputs, numberOfSample));
+                double error = outputs[numberOfSample] - output;
+                for (int numberOfInput = 0; numberOfInput < inputs.GetLength(1); numberOfInput++)
+                {
+                    weights[numberOfInput] += learningRate * error * inputs[numberOfSample, numberOfInput];
+                }
+                biasWeight += learningRate * error * 1;
+                totalError += Math.Abs(error);
             }
+            return totalError;
         }
-        internal void enableNeuron(double[] Inputs)
+
+        private double[] toInput(double[,] inputs, int numberOfSample)
         {
-            inputs = Inputs;
-            setState();
-            setOutput("SigmoidLogistic", 2, 2);
-            Console.WriteLine(output);
+            double[] input = new double[inputs.GetLength(1)];
+            for (int i = 0; i < inputs.GetLength(1); i++)
+            {
+                input[i] = inputs[numberOfSample, i];
+            }
+            return input;
+        } //to Extension
+
+        private double SigmoidLogistic(double State, double Alpha)
+        {
+            return 1 / (Math.Pow(Math.E, (-Alpha * State)) + 1);
         }
     }
 }
