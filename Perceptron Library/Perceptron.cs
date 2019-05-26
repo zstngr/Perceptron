@@ -1,17 +1,26 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Serialization.Formatters.Binary;
+using System.Text.RegularExpressions;
 
 namespace PerceptronLibrary
 {
+    [Serializable]
     public class Perceptron
     {
-        Neuron[] neurons;
-        double[] outputs;
+        public delegate void PerceptronStateHandler(string message);
+        public event PerceptronStateHandler Handler;
+        public event PerceptronStateHandler TrainInfo;
+
+        private Neuron[] neurons;
+        private double[] outputs;
 
         public int Size { get; private set; }
+        public bool isTrained = false;
 
         public Perceptron(int inputCount, int neuronCount)
         {
@@ -36,15 +45,21 @@ namespace PerceptronLibrary
         public void Train(double[,] inputs, double[,] outputs, int epochMax)
         {
             int epoch = 0;
+            double totalError = 0;
             while (epoch < epochMax)
             {
+                epoch++;
+                totalError = 0;
                 for (int i = 0; i < neurons.Length; i++)
                 {
                     double[] output = toOutput(outputs, i);
-                    neurons[i].Train(inputs, output);
+                    totalError += neurons[i].Train(inputs, output);
                 }
-                epoch++;
+                TrainInfo?.Invoke($"Epoch - {epoch}, Total error - {totalError}");
             }
+            isTrained = true;
+            Handler?.Invoke($"Training complete");
+            Handler?.Invoke($"Passed epochs - {epoch}, Total error is {totalError}");
         }
 
         public void Train(double[,] inputs, double[,] outputs, double errorThreshold)
@@ -53,16 +68,18 @@ namespace PerceptronLibrary
             double totalError = 1;
             while (totalError > errorThreshold)
             {
-                //Console.WriteLine($"Total Error: {totalError}");
                 epoch++;
                 totalError = 0;
                 for (int i = 0; i < neurons.Length; i++)
                 {
                     double[] output = toOutput(outputs, i);
-                    totalError += neurons[i].Train(inputs, output, errorThreshold);
+                    totalError += neurons[i].Train(inputs, output);
                 }
+                TrainInfo?.Invoke($"Epoch - {epoch}, Total error - {totalError}");
             }
-            //Console.WriteLine(epoch);
+            isTrained = true;
+            Handler?.Invoke($"Training complete");
+            Handler?.Invoke($"Passed epochs - {epoch}, Total error - {totalError}");
         }
 
         private double[] toOutput(double[,] outputs, int number)
@@ -74,6 +91,36 @@ namespace PerceptronLibrary
             }
             return output;
         } //to Extension
+
+        public void SaveAsDat(string filepath)
+        {
+            Regex regex = new Regex(@"\w*.dat$");
+            MatchCollection matches = regex.Matches(filepath);
+            if (matches.Count == 0)
+                filepath += ".dat";
+
+            BinaryFormatter serializer = new BinaryFormatter();
+            using (FileStream fs = new FileStream(filepath, FileMode.OpenOrCreate))
+            {
+                serializer.Serialize(fs, neurons);
+            }
+            Handler?.Invoke($"Network saved successfully");
+        }
+
+        public void LoadFromDat(string filepath)
+        {
+            Regex regex = new Regex(@"\w*.dat$");
+            MatchCollection matches = regex.Matches(filepath);
+            if (matches.Count == 0)
+                filepath += ".dat";
+
+            BinaryFormatter serializer = new BinaryFormatter();
+            using (FileStream fs = File.OpenRead(filepath))
+            {
+                neurons = (Neuron[])serializer.Deserialize(fs);
+            }
+            Handler?.Invoke($"Network loaded successfully");
+        }
     }
 }
 
