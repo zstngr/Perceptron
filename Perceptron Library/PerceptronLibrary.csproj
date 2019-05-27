@@ -42,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ActivationFunctions.cs" />
+    <Compile Include="DataPlot.cs" />
     <Compile Include="Perceptron.cs" />
     <Compile Include="DataSetTools.cs" />
     <Compile Include="Neuron.cs" />

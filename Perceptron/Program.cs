@@ -27,6 +27,11 @@ namespace Test
             nn.LoadFromDat(@"C:\Users\zstng\OneDrive\Рабочий стол\network");
             Console.WriteLine(nn.calculateOutput(input)[0]);
             Console.WriteLine(nn.calculateOutput(input)[1]);
+
+            foreach(DataPlot dp in network.ErrorPlot)
+            {
+                Console.WriteLine(dp.Error);
+            }
         }
 
         static void PrintMessage(string msg)

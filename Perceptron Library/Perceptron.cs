@@ -21,6 +21,7 @@ namespace PerceptronLibrary
 
         public int Size { get; private set; }
         public bool isTrained = false;
+        public List<DataPlot> ErrorPlot { get; private set; } //This is the plot data from network training
 
         public Perceptron(int inputCount, int neuronCount)
         {
@@ -44,42 +45,46 @@ namespace PerceptronLibrary
 
         public void Train(double[,] inputs, double[,] outputs, int epochMax)
         {
-            int epoch = 0;
+            ErrorPlot = new List<DataPlot>();
+            int currentEpoch = 0;
             double totalError = 0;
-            while (epoch < epochMax)
+            while (currentEpoch < epochMax)
             {
-                epoch++;
+                currentEpoch++;
                 totalError = 0;
                 for (int i = 0; i < neurons.Length; i++)
                 {
                     double[] output = toOutput(outputs, i);
                     totalError += neurons[i].Train(inputs, output);
                 }
-                TrainInfo?.Invoke($"Epoch - {epoch}, Total error - {totalError}");
+                TrainInfo?.Invoke($"Epoch - {currentEpoch}, Total error - {totalError}");
+                ErrorPlot.Add(new DataPlot(currentEpoch, totalError));
             }
             isTrained = true;
             Handler?.Invoke($"Training complete");
-            Handler?.Invoke($"Passed epochs - {epoch}, Total error is {totalError}");
+            Handler?.Invoke($"Passed epochs - {currentEpoch}, Total error is {totalError}");
         }
 
         public void Train(double[,] inputs, double[,] outputs, double errorThreshold)
         {
-            int epoch = 0;
+            ErrorPlot = new List<DataPlot>();
+            int currentEpoch = 0;
             double totalError = 1;
             while (totalError > errorThreshold)
             {
-                epoch++;
+                currentEpoch++;
                 totalError = 0;
                 for (int i = 0; i < neurons.Length; i++)
                 {
                     double[] output = toOutput(outputs, i);
                     totalError += neurons[i].Train(inputs, output);
                 }
-                TrainInfo?.Invoke($"Epoch - {epoch}, Total error - {totalError}");
+                TrainInfo?.Invoke($"Epoch - {currentEpoch}, Total error - {totalError}");
+                ErrorPlot.Add(new DataPlot(currentEpoch, totalError));
             }
             isTrained = true;
             Handler?.Invoke($"Training complete");
-            Handler?.Invoke($"Passed epochs - {epoch}, Total error - {totalError}");
+            Handler?.Invoke($"Passed epochs - {currentEpoch}, Total error - {totalError}");
         }
 
         private double[] toOutput(double[,] outputs, int number)
