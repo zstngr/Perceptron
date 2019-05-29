@@ -97,7 +97,7 @@ namespace PerceptronLibrary
             return output;
         } //to Extension
 
-        public void SaveAsDat(string filepath)
+        public void ExportToDat(string filepath)
         {
             Regex regex = new Regex(@"\w*.dat$");
             MatchCollection matches = regex.Matches(filepath);
@@ -112,7 +112,7 @@ namespace PerceptronLibrary
             Handler?.Invoke($"Network saved successfully");
         }
 
-        public void LoadFromDat(string filepath)
+        public void ImportFromDat(string filepath)
         {
             Regex regex = new Regex(@"\w*.dat$");
             MatchCollection matches = regex.Matches(filepath);

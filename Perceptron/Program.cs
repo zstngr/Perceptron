@@ -24,9 +24,9 @@ namespace Test
             Perceptron network = new Perceptron(2, 2);
             network.Handler += PrintMessage;
             network.Train(inputSet, outputSet, 0.005);
-            network.SaveAsDat(@"C:\Users\zstng\OneDrive\Рабочий стол\network");
+            network.ExportToDat(@"C:\Users\zstng\OneDrive\Рабочий стол\network");
             Perceptron nn = new Perceptron(2, 2);
-            nn.LoadFromDat(@"C:\Users\zstng\OneDrive\Рабочий стол\network");
+            nn.ImportFromDat(@"C:\Users\zstng\OneDrive\Рабочий стол\network");
             Console.WriteLine(nn.calculateOutput(input)[0]);
             Console.WriteLine(nn.calculateOutput(input)[1]);
         }

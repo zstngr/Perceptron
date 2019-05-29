@@ -62,7 +62,7 @@ namespace PerceptronLibrary
                 input[i] = inputs[numberOfSample, i];
             }
             return input;
-        } //to Extension
+        }
 
         private double SigmoidLogistic(double State, double Alpha)
         {
