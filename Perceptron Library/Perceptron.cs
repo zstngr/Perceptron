@@ -17,7 +17,7 @@ namespace PerceptronLibrary
         public event PerceptronStateHandler TrainInfo;
 
         private Neuron[] neurons;
-        private double[] outputs;
+        public readonly double[] outputs;
 
         public int Size { get; private set; }
         public bool isTrained = false;
@@ -34,7 +34,7 @@ namespace PerceptronLibrary
             }
         }
 
-        public double[] calculateOutput(double[] input)
+        public double[] CalculateOutput(double[] input)
         {
             for (int i = 0; i < neurons.Length; i++)
             {
@@ -43,18 +43,20 @@ namespace PerceptronLibrary
             return outputs;
         }
 
-        public void Train(double[,] inputs, double[,] outputs, int epochMax)
+        public void Train(double[,] inputs, double[,] outputs, int maxEpoch)
         {
             ErrorPlot = new List<DataPlot>();
             int currentEpoch = 0;
             double totalError = 0;
-            while (currentEpoch < epochMax)
+            while (currentEpoch < maxEpoch)
             {
                 currentEpoch++;
                 totalError = 0;
                 for (int i = 0; i < neurons.Length; i++)
                 {
-                    double[] output = toOutput(outputs, i);
+                    double[] output = SplitToOutput(outputs, i);
+                    neurons[i].LearningRateCorrection(currentEpoch, maxEpoch);
+                    TrainInfo?.Invoke($"Learning Rate change to - {neurons[i].learningRate}");
                     totalError += neurons[i].Train(inputs, output);
                 }
                 TrainInfo?.Invoke($"Epoch - {currentEpoch}, Total error - {totalError}");
@@ -76,7 +78,7 @@ namespace PerceptronLibrary
                 totalError = 0;
                 for (int i = 0; i < neurons.Length; i++)
                 {
-                    double[] output = toOutput(outputs, i);
+                    double[] output = SplitToOutput(outputs, i);
                     totalError += neurons[i].Train(inputs, output);
                 }
                 TrainInfo?.Invoke($"Epoch - {currentEpoch}, Total error - {totalError}");
@@ -87,7 +89,7 @@ namespace PerceptronLibrary
             Handler?.Invoke($"Passed epochs - {currentEpoch}, Total error - {totalError}");
         }
 
-        private double[] toOutput(double[,] outputs, int number)
+        private double[] SplitToOutput(double[,] outputs, int number)
         {
             double[] output = new double[outputs.GetLength(0)];
             for (int i = 0; i < outputs.GetLength(0); i++)
@@ -95,7 +97,7 @@ namespace PerceptronLibrary
                 output[i] = outputs[i, number];
             }
             return output;
-        } //to Extension
+        }
 
         public void ExportToDat(string filepath)
         {
@@ -126,7 +128,6 @@ namespace PerceptronLibrary
             }
             Handler?.Invoke($"Network loaded successfully");
         }
-
     }
 }
 

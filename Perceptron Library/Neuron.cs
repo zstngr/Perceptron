@@ -64,6 +64,11 @@ namespace PerceptronLibrary
             return input;
         }
 
+        internal void LearningRateCorrection(double currentEpoch, double maxEpoch)
+        {
+            learningRate = (double)((maxEpoch - currentEpoch) / (maxEpoch));
+        }
+
         private double SigmoidLogistic(double State, double Alpha)
         {
             return 1 / (Math.Pow(Math.E, (-Alpha * State)) + 1);
