@@ -3,33 +3,29 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace PerceptronLibrary
 {
     public static class DataSetTools
     {
-        public static int[] toIntArray(this string[] Array)
+        public static void SplitSet(string PathToSet, out double[,] InputsSet, out double[,] OutputsSet, int InputsCount, int OutputsCount, int SampleCount)
         {
-            int[] intArray = new int[Array.Length];
-            for (int i = 0; i < Array.Length; i++)
+            string[] ArraySet = File.ReadAllText(PathToSet).Split(new char[] { ' ', '\n', '#', '|' }, StringSplitOptions.RemoveEmptyEntries); //System.IO
+            OutputsSet = new double[SampleCount, OutputsCount];
+            InputsSet = new double[SampleCount, InputsCount];
+            int SampleLength = OutputsCount + InputsCount;
+            for (int SampleChanger = 0, SampleCounter = 0; (SampleChanger < ArraySet.Length && SampleCounter < SampleCount); SampleChanger += SampleLength, SampleCounter++)
             {
-                intArray[i] = int.Parse(Array[i]);
-            }
-            return intArray;
-        }
-
-        public static int[,] toDataSet(this string[] Array, int sampleSize, int IOSize)
-        {
-            int[,] dataSet = new int[sampleSize, IOSize];
-            int k = 0;
-            for(int i = 0; i < sampleSize; i++)
-            {
-                for(int j = 0; j < IOSize; j++)
+                for (int j = SampleChanger, i = 0; j < InputsCount + SampleChanger; j++, i++)
                 {
-                    dataSet[i, j] = int.Parse(Array[k++]);
+                    Double.TryParse(ArraySet[j], out InputsSet[SampleCounter, i]);
+                }
+                for (int j = SampleChanger + InputsCount, i = 0; j < OutputsCount + SampleChanger + InputsCount; j++, i++)
+                {
+                    Double.TryParse(ArraySet[j], out OutputsSet[SampleCounter, i]);
                 }
             }
-            return dataSet;
         }
     }
 }

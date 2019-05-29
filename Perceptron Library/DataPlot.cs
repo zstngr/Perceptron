@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace PerceptronLibrary
 {
-    public class DataPlot
+    public struct DataPlot
     {
         public double Epoch { get; private set; }
         public double Error { get; private set; }

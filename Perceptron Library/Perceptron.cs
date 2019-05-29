@@ -126,6 +126,7 @@ namespace PerceptronLibrary
             }
             Handler?.Invoke($"Network loaded successfully");
         }
+
     }
 }
 
