@@ -13,10 +13,11 @@ namespace PerceptronLibrary
         internal double output;
         private double[] weights;
         private double biasWeight;
+        private double Saturation;
         Random rnd = new Random();
-        public double learningRate = 0.1;
+        internal double learningRate = 0.1;
 
-        internal Neuron(int inputCount)
+        internal Neuron(int inputCount, double Saturation)
         {
             weights = new double[inputCount];
             for (int i = 0; i < weights.Length; i++)
@@ -24,6 +25,7 @@ namespace PerceptronLibrary
                 weights[i] = rnd.NextDouble();
             }
             biasWeight = rnd.NextDouble();
+            this.Saturation = Saturation;
         }
 
         internal double CalculateOutput(double[] input)
@@ -34,7 +36,7 @@ namespace PerceptronLibrary
                 state += input[i] * weights[i];
             }
             state += biasWeight;
-            return SigmoidLogistic(state, 1.0);
+            return SigmoidLogistic(state, Saturation);
         }
 
         internal double Train(double[,] inputs, double[] outputs) // In[NumberOfSample, NumberOfInput] Out[NumberOfSample]
