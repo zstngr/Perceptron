@@ -23,7 +23,7 @@ namespace PerceptronLibrary
         public bool isTrained = false;
         public List<DataPlot> ErrorPlot { get; private set; } //This is the plot data from network training
 
-        public Perceptron(int inputCount, int neuronCount, double Saturation)
+        public Perceptron(int inputCount, int neuronCount, double Saturation = 1.0)
         {
             Size = neuronCount;
             neurons = new Neuron[neuronCount];

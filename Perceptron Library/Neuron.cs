@@ -13,7 +13,7 @@ namespace PerceptronLibrary
         internal double output;
         private double[] weights;
         private double biasWeight;
-        private double Saturation;
+        private readonly double Saturation;
         Random rnd = new Random();
         internal double learningRate = 0.1;
 

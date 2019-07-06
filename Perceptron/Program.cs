@@ -17,7 +17,7 @@ namespace Test
 
             string path = @"C:\Users\zstng\OneDrive\Рабочий стол\dataset.txt";
             DataSetTools.SplitSet(path, out inputSet, out outputSet, 2, 2, 4);
-            Perceptron network = new Perceptron(2, 2, 1.0); // (InputCount, OutputCount/NeuronCount, Saturation param)
+            Perceptron network = new Perceptron(2, 2); // (InputCount, OutputCount/NeuronCount, Saturation param)
             network.Handler += PrintMessage;
             network.Train(inputSet, outputSet, 0.005);
 
